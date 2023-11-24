@@ -1,4 +1,4 @@
-package logger_v2
+package logger
 
 // PrintF formats the data and prints it without any logging information
 func (l *Logger) PrintF(msg string, data ...interface{}) {

@@ -1,4 +1,4 @@
-package logger_v2
+package logger
 
 // DebugE logs an error with the log level debug
 func (l *Logger) DebugE(err error) {

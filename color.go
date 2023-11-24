@@ -1,4 +1,4 @@
-package logger_v2
+package logger
 
 import (
 	"strconv"
