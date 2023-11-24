@@ -8,18 +8,18 @@ Simple easy to use logger for golang. Supports colors and different log levels.
 package main
 
 import (
-	"gitlab.com/milan44/logger-v2"
+	"github.com/coalaura/logger"
 )
 
 func main() {
     // Default Logger
-    log := logger_v2.New()
+    log := logger.New()
 
     // Custom output
     log.WithOutput(os.Stdout)
 
     // Options
-    log.WithOptions(logger_v2.Options{
+    log.WithOptions(logger.Options{
         NoColor: false,
         NoLevel: false,
         NoTime:  false,
