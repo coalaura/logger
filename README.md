@@ -1,6 +1,8 @@
+![banner](.github/banner.png)
+
 # Logger
 
-Super customizable golang logger, including color support for all common operating systems (windows, linux, mac).
+Simple easy to use logger for golang. Supports colors and different log levels.
 
 ```go
 package main
