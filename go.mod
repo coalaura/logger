@@ -1,4 +1,4 @@
-module gitlab.com/milan44/logger-v2
+module github.com/coalaura/logger
 
 go 1.15
 
