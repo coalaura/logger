@@ -1,7 +1,6 @@
 package gin
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/coalaura/logger"
@@ -27,6 +26,14 @@ func GinMiddleware(log *logger.Logger) gin.HandlerFunc {
 	}
 }
 
+func (a *GinAdapter) Method() string {
+	return a.ctx.Request.Method
+}
+
+func (a *GinAdapter) Path() string {
+	return a.ctx.Request.URL.Path
+}
+
 func (a *GinAdapter) ClientIP() string {
 	return a.ctx.ClientIP()
 }
@@ -37,8 +44,4 @@ func (a *GinAdapter) StatusCode() int {
 
 func (a *GinAdapter) TimeTaken() time.Duration {
 	return a.timeTaken
-}
-
-func (a *GinAdapter) Request() *http.Request {
-	return a.ctx.Request
 }

@@ -35,6 +35,8 @@ var (
 		4: 202,
 		5: 124,
 	}
+
+	Methods = []string{"GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"}
 )
 
 // LogHTTPRequest logs the given request with the given adapter.
