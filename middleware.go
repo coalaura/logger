@@ -8,8 +8,6 @@ import (
 )
 
 type MiddlewareAdapter interface {
-	Next()
-
 	Request() http.Request
 	ClientIP() string
 	StatusCode() int
