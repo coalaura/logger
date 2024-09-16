@@ -3,7 +3,7 @@ module github.com/coalaura/logger/fiber
 go 1.23.1
 
 require (
-	github.com/coalaura/logger v1.1.3
+	github.com/coalaura/logger v1.2.0
 	github.com/gofiber/fiber/v2 v2.52.5
 )
 

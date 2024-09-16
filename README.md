@@ -47,6 +47,9 @@ import (
     "github.com/coalaura/logger"
     adapter "github.com/coalaura/logger/fiber"
     "github.com/gofiber/fiber/v2"
+
+    // adapter "github.com/coalaura/logger/gin"
+    // adapter "github.com/coalaura/logger/http"
 )
 
 var log = logger.New()
