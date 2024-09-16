@@ -64,3 +64,5 @@ func main() {
     // ...
 }
 ```
+
+![middleware](.github/middleware.png)
