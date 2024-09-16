@@ -31,11 +31,31 @@ func main() {
     log.Warning("This is a Warning Message")
     log.Error("This is an Error Message")
     log.Fatal("This is a Fatal Message")
-
-    // Gin Middleware
-    // r := gin.Default()
-    r.Use(log.Middleware())
 }
 ```
 
 ![test](.github/test.png)
+
+## HTTP Middleware
+
+The logger supplies a `LogHTTPRequest(MiddlewareAdapter)` function. There are also adapters available for various http frameworks like fiber, gin and more.
+
+```go
+package main
+
+import (
+    "github.com/coalaura/logger"
+    adapter "github.com/coalaura/logger/fiber"
+    "github.com/gofiber/fiber/v2"
+)
+
+var log = logger.New()
+
+func main() {
+    app := fiber.New()
+
+    app.Use(adapter.FiberMiddleware(log))
+
+    // ...
+}
+```
