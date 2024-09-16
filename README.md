@@ -48,7 +48,9 @@ import (
     adapter "github.com/coalaura/logger/fiber"
     "github.com/gofiber/fiber/v2"
 
+    // adapter "github.com/coalaura/logger/fiber"
     // adapter "github.com/coalaura/logger/gin"
+    // adapter "github.com/coalaura/logger/echo"
     // adapter "github.com/coalaura/logger/http"
 )
 
