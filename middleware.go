@@ -8,7 +8,7 @@ import (
 )
 
 type MiddlewareAdapter interface {
-	Request() http.Request
+	Request() *http.Request
 	ClientIP() string
 	StatusCode() int
 	TimeTaken() time.Duration
