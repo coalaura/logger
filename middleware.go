@@ -2,13 +2,13 @@ package logger
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 	"time"
 )
 
 type MiddlewareAdapter interface {
-	Request() *http.Request
+	Method() string
+	Path() string
 	ClientIP() string
 	StatusCode() int
 	TimeTaken() time.Duration
@@ -40,18 +40,19 @@ var (
 // LogHTTPRequest logs the given request with the given adapter.
 func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 	// Get the request information
-	request := adp.Request()
+	method := adp.Method()
+	path := adp.Path()
 	ip := adp.ClientIP()
 	statusCode := adp.StatusCode()
 	timeTaken := adp.TimeTaken()
 
 	// Resolve colors
-	method, ok := MethodColors[request.Method]
+	methodColor, ok := MethodColors[method]
 	if !ok {
-		method = 52
+		methodColor = 52
 	}
 
-	status, ok := StatusCodeColors[statusCode/100]
+	statusColor, ok := StatusCodeColors[statusCode/100]
 	if !ok {
 		/*
 		* 218 This is fine
@@ -59,14 +60,14 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 		* 420 Enhance Your Calm
 		 */
 		if statusCode == 218 || statusCode == 418 || statusCode == 420 {
-			status = 210
+			statusColor = 210
 		} else {
-			status = 111
+			statusColor = 111
 		}
 	}
 
 	// Format strings
-	methodStr := fmt.Sprintf("%-7s", strings.ToLower(request.Method))
+	methodStr := fmt.Sprintf("%-7s", strings.ToLower(method))
 	timeStr := fmt.Sprintf("%-5s ", _fmtDuration(timeTaken))
 	ipStr := fmt.Sprintf("%-15s ", ip)
 	statusStr := fmt.Sprintf("%-3d ", statusCode)
@@ -78,7 +79,7 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 	l.CPrint(l.date(), 243, 0)
 
 	l.CPrint("[", 243, 0)
-	l.CPrint(methodStr, method, 0)
+	l.CPrint(methodStr, methodColor, 0)
 	l.CPrint("] ", 243, 0)
 
 	l.CPrint("[", 243, 0)
@@ -90,10 +91,10 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 	l.CPrint("] ", 243, 0)
 
 	l.CPrint("[", 243, 0)
-	l.CPrint(statusStr, status, 0)
+	l.CPrint(statusStr, statusColor, 0)
 	l.CPrint("] ", 243, 0)
 
-	l.CPrint(request.URL.Path, 248, 0)
+	l.CPrint(path, 248, 0)
 	l.CPrint("\n", 0, 0)
 }
 
