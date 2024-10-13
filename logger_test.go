@@ -21,3 +21,9 @@ func TestLogger(t *testing.T) {
 
 	l.PrintLn()
 }
+
+func TestColor(t *testing.T) {
+	l := New()
+
+	l.PrintColor("~199~pink text ~39~blue text ~160~red text")
+}

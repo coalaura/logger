@@ -1,7 +1,10 @@
 package logger
 
 import (
+	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/gookit/color"
 )
@@ -18,5 +21,46 @@ func (l *Logger) CPrint(msg string, foreground, background int) {
 
 	color.Fprint(l.out, msg)
 
+	_, _ = color.Reset()
+}
+
+func (l *Logger) PrintColor(msg string, data ...interface{}) {
+	text := fmt.Sprintf(msg, data...)
+
+	rgx := regexp.MustCompile(`~(\d+)~`)
+	matches := rgx.FindAllStringSubmatchIndex(text, -1)
+
+	var (
+		index = 0
+
+		chunk  string
+		code   string
+		result strings.Builder
+	)
+
+	for _, match := range matches {
+		chunk = text[index:match[0]]
+
+		if code != "" {
+			chunk = color.RenderCode("38;5;"+code, chunk)
+		}
+
+		result.WriteString(chunk)
+
+		code = text[match[2]:match[3]]
+		index = match[1]
+	}
+
+	if index < len(text) {
+		chunk = text[index:]
+
+		if code != "" {
+			chunk = color.RenderCode("38;5;"+code, chunk)
+		}
+
+		result.WriteString(chunk)
+	}
+
+	color.Fprint(l.out, result.String())
 	_, _ = color.Reset()
 }
