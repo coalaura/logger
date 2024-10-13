@@ -42,20 +42,24 @@ func (l *Logger) print(level int, data ...interface{}) {
 	defer l.mx.Unlock()
 
 	if !l.options.NoTime {
-		l.CPrint(l.date(), 243, 0)
+		l._printColor(l.date(), 243, 0)
 	}
 
 	if !l.options.NoLevel {
 		fg, lvl := l._level(level)
 
 		if lvl != "" {
-			l.CPrint("[", 243, 0)
-			l.CPrint(fmt.Sprintf("%-7s", lvl), fg, 0)
-			l.CPrint("] ", 243, 0)
+			l._printColor("[", 243, 0)
+			l._printColor(fmt.Sprintf("%-7s", lvl), fg, 0)
+			l._printColor("] ", 243, 0)
 		}
 	}
 
-	l.CPrint(fmt.Sprint(data...), 248, 0)
+	if l.options.ParseCodes {
+		l._printWithCodes(fmt.Sprint(data...))
+	} else {
+		l._printColor(fmt.Sprint(data...), 248, 0)
+	}
 }
 
 func (l *Logger) printF(level int, format string, data ...interface{}) {
@@ -67,7 +71,7 @@ func (l *Logger) printLn(level int, data ...interface{}) {
 		l.mx.Lock()
 		defer l.mx.Unlock()
 
-		l.CPrint("\n", 0, 0)
+		l._printColor("\n", 0, 0)
 
 		return
 	}

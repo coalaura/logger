@@ -78,26 +78,26 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 	l.mx.Lock()
 	defer l.mx.Unlock()
 
-	l.CPrint(l.date(), 243, 0)
+	l._printColor(l.date(), 243, 0)
 
-	l.CPrint("[", 243, 0)
-	l.CPrint(methodStr, methodColor, 0)
-	l.CPrint("] ", 243, 0)
+	l._printColor("[", 243, 0)
+	l._printColor(methodStr, methodColor, 0)
+	l._printColor("] ", 243, 0)
 
-	l.CPrint("[", 243, 0)
-	l.CPrint(timeStr, 115, 0)
-	l.CPrint("] ", 243, 0)
+	l._printColor("[", 243, 0)
+	l._printColor(timeStr, 115, 0)
+	l._printColor("] ", 243, 0)
 
-	l.CPrint("[", 243, 0)
-	l.CPrint(ipStr, 248, 0)
-	l.CPrint("] ", 243, 0)
+	l._printColor("[", 243, 0)
+	l._printColor(ipStr, 248, 0)
+	l._printColor("] ", 243, 0)
 
-	l.CPrint("[", 243, 0)
-	l.CPrint(statusStr, statusColor, 0)
-	l.CPrint("] ", 243, 0)
+	l._printColor("[", 243, 0)
+	l._printColor(statusStr, statusColor, 0)
+	l._printColor("] ", 243, 0)
 
-	l.CPrint(path, 248, 0)
-	l.CPrint("\n", 0, 0)
+	l._printColor(path, 248, 0)
+	l._printColor("\n", 0, 0)
 }
 
 func _fmtDuration(d time.Duration) string {

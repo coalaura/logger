@@ -14,9 +14,10 @@ type Logger struct {
 }
 
 type Options struct {
-	NoColor bool
-	NoLevel bool
-	NoTime  bool
+	NoColor    bool
+	NoLevel    bool
+	NoTime     bool
+	ParseCodes bool
 }
 
 // New creates a new logger instance with the given options

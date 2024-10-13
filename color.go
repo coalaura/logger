@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -9,8 +8,7 @@ import (
 	"github.com/gookit/color"
 )
 
-// CPrint prints a message with the given colors, to the logger's output.
-func (l *Logger) CPrint(msg string, foreground, background int) {
+func (l *Logger) _printColor(msg string, foreground, background int) {
 	if !l.options.NoColor && foreground > 0 {
 		msg = color.RenderCode("38;5;"+strconv.Itoa(foreground), msg)
 	}
@@ -24,17 +22,15 @@ func (l *Logger) CPrint(msg string, foreground, background int) {
 	_, _ = color.Reset()
 }
 
-func (l *Logger) PrintColor(msg string, data ...interface{}) {
-	text := fmt.Sprintf(msg, data...)
-
+func (l *Logger) _printWithCodes(text string) {
 	rgx := regexp.MustCompile(`~(\d+)~`)
 	matches := rgx.FindAllStringSubmatchIndex(text, -1)
 
 	var (
 		index = 0
+		code  = "248"
 
 		chunk  string
-		code   string
 		result strings.Builder
 	)
 

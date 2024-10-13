@@ -23,7 +23,10 @@ func TestLogger(t *testing.T) {
 }
 
 func TestColor(t *testing.T) {
-	l := New()
+	l := New().WithOptions(Options{
+		NoTime:     true,
+		ParseCodes: true,
+	})
 
-	l.PrintColor("~199~pink text ~39~blue text ~160~red text")
+	l.Info("~199~pink text ~39~blue text ~160~red text")
 }
