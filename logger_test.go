@@ -6,7 +6,9 @@ import (
 )
 
 func TestLogger(t *testing.T) {
-	l := New()
+	l := New().WithOptions(Options{
+		ParseCodes: true,
+	})
 
 	l.PrintLn()
 
@@ -19,7 +21,9 @@ func TestLogger(t *testing.T) {
 	l.Fatal("This is a Fatal Message")
 	l.PrintLn("Just a normal message")
 
-	l.PrintLn()
+	l.PrintLn("Just a normal message")
+
+	l.PrintLn("~199~pink text ~39~blue text ~160~red text ~r~reset text ~15~white text")
 }
 
 func TestColor(t *testing.T) {

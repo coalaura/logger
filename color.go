@@ -23,7 +23,7 @@ func (l *Logger) _printColor(msg string, foreground, background int) {
 }
 
 func (l *Logger) _printWithCodes(text string) {
-	rgx := regexp.MustCompile(`~(\d+)~`)
+	rgx := regexp.MustCompile(`~(\d+|r)~`)
 	matches := rgx.FindAllStringSubmatchIndex(text, -1)
 
 	var (
@@ -41,7 +41,9 @@ func (l *Logger) _printWithCodes(text string) {
 	for _, match := range matches {
 		chunk = text[index:match[0]]
 
-		if code != "" {
+		if code == "r" {
+			chunk = color.RenderCode("33;0", chunk)
+		} else if code != "" {
 			chunk = color.RenderCode("38;5;"+code, chunk)
 		}
 
@@ -54,7 +56,9 @@ func (l *Logger) _printWithCodes(text string) {
 	if index < len(text) {
 		chunk = text[index:]
 
-		if code != "" {
+		if code == "r" {
+			chunk = color.RenderCode("33;0", chunk)
+		} else if code != "" {
 			chunk = color.RenderCode("38;5;"+code, chunk)
 		}
 
