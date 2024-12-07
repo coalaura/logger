@@ -34,6 +34,10 @@ func (l *Logger) _printWithCodes(text string) {
 		result strings.Builder
 	)
 
+	if l.options.NoColor {
+		code = ""
+	}
+
 	for _, match := range matches {
 		chunk = text[index:match[0]]
 
