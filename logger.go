@@ -58,20 +58,22 @@ func (l *Logger) print(level int, data ...interface{}) {
 		builder.Write("243", l.date())
 	}
 
-	if !l.options.NoLevel {
-		fg, lvl := l.level(level)
+	fg, lvl := l.level(level)
 
+	if !l.options.NoLevel {
 		if lvl != "" {
 			builder.Write("243", "[")
 			builder.WriteF(fg, "%-7s", lvl)
 			builder.Write("243", "] ")
 		}
+
+		fg = l.foreground
 	}
 
 	if l.options.ParseCodes {
-		l.parseColorCodes(builder, fmt.Sprint(data...))
+		l.parseColorCodes(builder, fg, fmt.Sprint(data...))
 	} else {
-		builder.Write(l.foreground, fmt.Sprint(data...))
+		builder.Write(fg, fmt.Sprint(data...))
 	}
 
 	l.write(builder.String())

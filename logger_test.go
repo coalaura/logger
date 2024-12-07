@@ -10,8 +10,11 @@ type DummyAdapter struct{}
 
 func TestLogger(t *testing.T) {
 	l := New().WithOptions(Options{
+		NoLevel:    true,
+		NoTime:     true,
 		ParseCodes: true,
-	}).WithBackground(123)
+		//NoColor:    true,
+	}).WithNoForeground()
 
 	l.Println()
 

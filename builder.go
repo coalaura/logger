@@ -22,6 +22,10 @@ func newColorBuilder(logger *Logger) *colorBuilder {
 	}
 }
 
+func (b *colorBuilder) ForceColor() {
+	b.color = true
+}
+
 func (b *colorBuilder) String() string {
 	if b.hasBackground || b.hasForeground {
 		b.WriteString("\033[0m")

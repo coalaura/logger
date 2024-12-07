@@ -4,7 +4,7 @@ import (
 	"regexp"
 )
 
-func (l *Logger) parseColorCodes(builder *colorBuilder, text string) {
+func (l *Logger) parseColorCodes(builder *colorBuilder, fg, text string) {
 	rgx := regexp.MustCompile(`~(\d+|r)~`)
 	matches := rgx.FindAllStringSubmatchIndex(text, -1)
 
@@ -12,7 +12,7 @@ func (l *Logger) parseColorCodes(builder *colorBuilder, text string) {
 		index int
 		chunk string
 
-		code = l.foreground
+		code = fg
 	)
 
 	for _, match := range matches {
@@ -20,12 +20,14 @@ func (l *Logger) parseColorCodes(builder *colorBuilder, text string) {
 
 		if code == "r" {
 			builder.Write("", chunk)
-		} else if code != "" {
+		} else {
 			builder.Write(code, chunk)
 		}
 
 		code = text[match[2]:match[3]]
 		index = match[1]
+
+		builder.ForceColor()
 	}
 
 	if index < len(text) {
@@ -33,7 +35,7 @@ func (l *Logger) parseColorCodes(builder *colorBuilder, text string) {
 
 		if code == "r" {
 			builder.Write("", chunk)
-		} else if code != "" {
+		} else {
 			builder.Write(code, chunk)
 		}
 	}
