@@ -1,8 +1,8 @@
 package logger
 
-// PrintF formats the data and prints it without any logging information
-func (l *Logger) PrintF(msg string, data ...interface{}) {
-	l.printF(-1, msg, data...)
+// Printf formats the data and prints it without any logging information
+func (l *Logger) Printf(msg string, data ...interface{}) {
+	l.printf(-1, msg, data...)
 }
 
 // Print prints the data and without any logging information
@@ -10,67 +10,67 @@ func (l *Logger) Print(data ...interface{}) {
 	l.print(-1, data...)
 }
 
-// PrintLn prints the data and without any logging information
-func (l *Logger) PrintLn(data ...interface{}) {
-	l.printLn(-1, data...)
+// Println prints the data and without any logging information
+func (l *Logger) Println(data ...interface{}) {
+	l.println(-1, data...)
 }
 
-// DebugF formats the data and prints it with the log level debug
-func (l *Logger) DebugF(msg string, data ...interface{}) {
-	l.printF(LevelDebug, msg, data...)
+// Debugf formats the data and prints it with the log level debug
+func (l *Logger) Debugf(msg string, data ...interface{}) {
+	l.printf(LevelDebug, msg, data...)
 }
 
 // Debug prints the data with the log level debug
 func (l *Logger) Debug(data ...interface{}) {
-	l.printLn(LevelDebug, data...)
+	l.println(LevelDebug, data...)
 }
 
-// NoteF formats the data and prints it with the log level notice
-func (l *Logger) NoteF(msg string, data ...interface{}) {
-	l.printF(LevelNotice, msg, data...)
+// Notef formats the data and prints it with the log level notice
+func (l *Logger) Notef(msg string, data ...interface{}) {
+	l.printf(LevelNotice, msg, data...)
 }
 
 // Note prints the data with the log level notice
 func (l *Logger) Note(data ...interface{}) {
-	l.printLn(LevelNotice, data...)
+	l.println(LevelNotice, data...)
 }
 
-// InfoF formats the data and prints it with the log level info
-func (l *Logger) InfoF(msg string, data ...interface{}) {
-	l.printF(LevelInfo, msg, data...)
+// Infof formats the data and prints it with the log level info
+func (l *Logger) Infof(msg string, data ...interface{}) {
+	l.printf(LevelInfo, msg, data...)
 }
 
 // Info prints the data with the log level info
 func (l *Logger) Info(data ...interface{}) {
-	l.printLn(LevelInfo, data...)
+	l.println(LevelInfo, data...)
 }
 
-// WarningF formats the data and prints it with the log level warning
-func (l *Logger) WarningF(msg string, data ...interface{}) {
-	l.printF(LevelWarning, msg, data...)
+// Warningf formats the data and prints it with the log level warning
+func (l *Logger) Warningf(msg string, data ...interface{}) {
+	l.printf(LevelWarning, msg, data...)
 }
 
 // Warning prints the data with the log level warning
 func (l *Logger) Warning(data ...interface{}) {
-	l.printLn(LevelWarning, data...)
+	l.println(LevelWarning, data...)
 }
 
-// ErrorF formats the data and prints it with the log level error
-func (l *Logger) ErrorF(msg string, data ...interface{}) {
-	l.printF(LevelError, msg, data...)
+// Errorf formats the data and prints it with the log level error
+func (l *Logger) Errorf(msg string, data ...interface{}) {
+	l.printf(LevelError, msg, data...)
 }
 
 // Error prints the data with the log level error
 func (l *Logger) Error(data ...interface{}) {
-	l.printLn(LevelError, data...)
+	l.println(LevelError, data...)
 }
 
-// FatalF formats the data and prints it with the log level fatal
-func (l *Logger) FatalF(msg string, data ...interface{}) {
-	l.printF(LevelFatal, msg, data...)
+// Fatalf formats the data and prints it with the log level fatal
+func (l *Logger) Fatalf(msg string, data ...interface{}) {
+	l.printf(LevelFatal, msg, data...)
 }
 
 // Fatal prints the data with the log level fatal
 func (l *Logger) Fatal(data ...interface{}) {
-	l.printLn(LevelFatal, data...)
+	l.println(LevelFatal, data...)
 }

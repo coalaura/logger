@@ -3,6 +3,8 @@ package logger
 import (
 	"fmt"
 	"time"
+
+	"github.com/gookit/color"
 )
 
 const (
@@ -14,73 +16,75 @@ const (
 	LevelFatal
 )
 
-func (l *Logger) _level(level int) (int, string) {
+// level returns the color and level name
+func (l *Logger) level(level int) (string, string) {
 	switch level {
 	case LevelDebug:
-		return 188, "debug"
+		return "188", "debug"
 	case LevelNotice:
-		return 216, "note"
+		return "216", "note"
 	case LevelInfo:
-		return 117, "info"
+		return "117", "info"
 	case LevelWarning:
-		return 202, "warn"
+		return "202", "warn"
 	case LevelError:
-		return 124, "error"
+		return "124", "error"
 	case LevelFatal:
-		return 196, "fatal"
+		return "196", "fatal"
 	}
 
-	return 0, ""
+	return "", ""
 }
 
+// date returns the date string
 func (l *Logger) date() string {
 	return fmt.Sprintf("[%-23s] ", time.Now().Format("2006-01-02T15:04:05 MST"))
 }
 
-func (l *Logger) print(level int, data ...interface{}) {
+// write writes the message to the output
+func (l *Logger) write(msg string) {
 	l.mx.Lock()
 	defer l.mx.Unlock()
 
+	color.Fprint(l.out, msg)
+	_, _ = color.Reset()
+}
+
+// print colors the message and then writes it
+func (l *Logger) print(level int, data ...interface{}) {
+	builder := newColorBuilder(l)
+
 	if !l.options.NoTime {
-		l._printColor(l.date(), 243, 0)
+		builder.Write("243", l.date())
 	}
 
 	if !l.options.NoLevel {
-		fg, lvl := l._level(level)
+		fg, lvl := l.level(level)
 
 		if lvl != "" {
-			l._printColor("[", 243, 0)
-			l._printColor(fmt.Sprintf("%-7s", lvl), fg, 0)
-			l._printColor("] ", 243, 0)
+			builder.Write("243", "[")
+			builder.WriteF(fg, "%-7s", lvl)
+			builder.Write("243", "] ")
 		}
 	}
 
 	if l.options.ParseCodes {
-		l._printWithCodes(fmt.Sprint(data...))
+		l.parseColorCodes(builder, fmt.Sprint(data...))
 	} else {
-		l._printColor(fmt.Sprint(data...), 248, 0)
+		builder.Write(l.foreground, fmt.Sprint(data...))
 	}
+
+	l.write(builder.String())
 }
 
-func (l *Logger) printF(level int, format string, data ...interface{}) {
+// printf formats the data and then prints it
+func (l *Logger) printf(level int, format string, data ...interface{}) {
 	l.print(level, fmt.Sprintf(format, data...))
 }
 
-func (l *Logger) printLn(level int, data ...interface{}) {
-	if len(data) == 0 {
-		l.mx.Lock()
-		defer l.mx.Unlock()
-
-		l._printColor("\n", 0, 0)
-
-		return
-	}
-
+// printLn formats the data with a new line and then prints it
+func (l *Logger) println(level int, data ...interface{}) {
 	data = append(data, "\n")
 
 	l.print(level, data...)
-}
-
-func (l *Logger) printFln(level int, format string, data ...interface{}) {
-	l.printF(level, format+"\n", data...)
 }

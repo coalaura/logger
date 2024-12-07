@@ -15,25 +15,25 @@ type MiddlewareAdapter interface {
 }
 
 var (
-	MethodColors = map[string]int{
-		"GET":     33,
-		"HEAD":    141,
-		"POST":    36,
-		"PUT":     34,
-		"DELETE":  160,
-		"CONNECT": 45,
-		"OPTIONS": 209,
-		"TRACE":   162,
-		"PATCH":   202,
+	MethodColors = map[string]string{
+		"GET":     "33",
+		"HEAD":    "141",
+		"POST":    "36",
+		"PUT":     "34",
+		"DELETE":  "160",
+		"CONNECT": "45",
+		"OPTIONS": "209",
+		"TRACE":   "162",
+		"PATCH":   "202",
 	}
 
 	// Integer divided by 100 (floored)
-	StatusCodeColors = map[int]int{
-		1: 159,
-		2: 34,
-		3: 184,
-		4: 202,
-		5: 124,
+	StatusCodeColors = map[int]string{
+		1: "159",
+		2: "34",
+		3: "184",
+		4: "202",
+		5: "124",
 	}
 
 	Methods = []string{"GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"}
@@ -51,7 +51,7 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 	// Resolve colors
 	methodColor, ok := MethodColors[method]
 	if !ok {
-		methodColor = 52
+		methodColor = "52"
 	}
 
 	statusColor, ok := StatusCodeColors[statusCode/100]
@@ -62,9 +62,9 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 		* 420 Enhance Your Calm
 		 */
 		if statusCode == 218 || statusCode == 418 || statusCode == 420 {
-			statusColor = 210
+			statusColor = "210"
 		} else {
-			statusColor = 111
+			statusColor = "111"
 		}
 	}
 
@@ -75,29 +75,29 @@ func (l *Logger) LogHTTPRequest(adp MiddlewareAdapter) {
 	statusStr := fmt.Sprintf("%-3d ", statusCode)
 
 	// Log the request
-	l.mx.Lock()
-	defer l.mx.Unlock()
+	builder := newColorBuilder(l)
 
-	l._printColor(l.date(), 243, 0)
+	builder.Write("243", l.date())
 
-	l._printColor("[", 243, 0)
-	l._printColor(methodStr, methodColor, 0)
-	l._printColor("] ", 243, 0)
+	builder.Write("243", "[")
+	builder.Write(methodColor, methodStr)
+	builder.Write("243", "] ")
 
-	l._printColor("[", 243, 0)
-	l._printColor(timeStr, 115, 0)
-	l._printColor("] ", 243, 0)
+	builder.Write("243", "[")
+	builder.Write("115", timeStr)
+	builder.Write("243", "] ")
 
-	l._printColor("[", 243, 0)
-	l._printColor(ipStr, 248, 0)
-	l._printColor("] ", 243, 0)
+	builder.Write("243", "[")
+	builder.Write("248", ipStr)
+	builder.Write("243", "] ")
 
-	l._printColor("[", 243, 0)
-	l._printColor(statusStr, statusColor, 0)
-	l._printColor("] ", 243, 0)
+	builder.Write("243", "[")
+	builder.Write(statusColor, statusStr)
+	builder.Write("243", "] ")
 
-	l._printColor(path, 248, 0)
-	l._printColor("\n", 0, 0)
+	builder.Write("248", path)
+
+	l.write(builder.StringLn())
 }
 
 func _fmtDuration(d time.Duration) string {
