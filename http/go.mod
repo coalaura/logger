@@ -1,4 +1,4 @@
-module github.com/coalaura/logger/chi
+module github.com/coalaura/logger/http
 
 go 1.23.1
 
