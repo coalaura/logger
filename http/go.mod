@@ -1,8 +1,8 @@
 module github.com/coalaura/logger/http
 
-go 1.23.1
+go 1.23.5
 
-require github.com/coalaura/logger v1.2.0
+require github.com/coalaura/logger v1.4.1
 
 require (
 	github.com/gookit/color v1.5.4 // indirect

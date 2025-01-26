@@ -1,9 +1,9 @@
 module github.com/coalaura/logger/echo
 
-go 1.23.1
+go 1.23.5
 
 require (
-	github.com/coalaura/logger v1.2.0
+	github.com/coalaura/logger v1.4.1
 	github.com/labstack/echo/v4 v4.12.0
 )
 

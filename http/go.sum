@@ -1,5 +1,5 @@
-github.com/coalaura/logger v1.2.0 h1:LhC0I7S3VJJXNf0JkGOMybkRJRls9XRxm+yaV6svO+Q=
-github.com/coalaura/logger v1.2.0/go.mod h1:4lGnkI2dT7d0GSO3l1ci6dhxAJy3SWqjOi03k+Ugwxc=
+github.com/coalaura/logger v1.4.1 h1:rszrsV4fpmqZsgWTNMwY57knB2vE3TUxPgq3Y9wNOZg=
+github.com/coalaura/logger v1.4.1/go.mod h1:4lGnkI2dT7d0GSO3l1ci6dhxAJy3SWqjOi03k+Ugwxc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gookit/color v1.5.4 h1:FZmqs7XOyGgCAxmWyPslpiok1k05wmY3SJTytgvYFs0=

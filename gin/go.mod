@@ -1,9 +1,9 @@
 module github.com/coalaura/logger/gin
 
-go 1.23.1
+go 1.23.5
 
 require (
-	github.com/coalaura/logger v1.2.0
+	github.com/coalaura/logger v1.4.1
 	github.com/gin-gonic/gin v1.10.0
 )
 
