@@ -46,8 +46,14 @@ func (l *Logger) write(msg string) {
 	l.mx.Lock()
 	defer l.mx.Unlock()
 
+	if l.forceNoColor {
+		l.out.Write([]byte(msg))
+
+		return
+	}
+
 	color.Fprint(l.out, msg)
-	_, _ = color.Reset()
+	color.Reset()
 }
 
 // print colors the message and then writes it
