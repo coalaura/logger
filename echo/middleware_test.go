@@ -14,7 +14,7 @@ func TestEchoMiddleware(t *testing.T) {
 	l := logger.New()
 
 	e := echo.New()
-	e.Use(EchoMiddleWare(l))
+	e.Use(MiddleWare(l))
 
 	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"}
 

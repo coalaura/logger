@@ -13,7 +13,7 @@ type HTTPAdapter struct {
 	timeTaken time.Duration
 }
 
-func HTTPMiddleware(log *logger.Logger) func(http.Handler) http.Handler {
+func Middleware(log *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			wr := &statusWriter{

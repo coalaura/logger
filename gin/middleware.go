@@ -13,7 +13,7 @@ type GinAdapter struct {
 	timeTaken time.Duration
 }
 
-func GinMiddleware(log *logger.Logger) gin.HandlerFunc {
+func Middleware(log *logger.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 

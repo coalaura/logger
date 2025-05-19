@@ -13,7 +13,7 @@ type FiberAdapter struct {
 	timeTaken time.Duration
 }
 
-func FiberMiddleware(log *logger.Logger) fiber.Handler {
+func Middleware(log *logger.Logger) fiber.Handler {
 	return func(c *fiber.Ctx) (err error) {
 		start := time.Now()
 

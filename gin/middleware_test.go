@@ -14,7 +14,7 @@ func TestMiddleware(t *testing.T) {
 	l := logger.New()
 
 	app := gin.New()
-	app.Use(GinMiddleware(l))
+	app.Use(Middleware(l))
 
 	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"}
 

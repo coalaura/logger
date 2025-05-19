@@ -17,7 +17,7 @@ func TestHTTPMiddleware(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	wrapped := HTTPMiddleware(l)(handler)
+	wrapped := Middleware(l)(handler)
 
 	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"}
 

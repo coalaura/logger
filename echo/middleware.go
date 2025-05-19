@@ -12,7 +12,7 @@ type EchoAdapter struct {
 	timeTaken time.Duration
 }
 
-func EchoMiddleWare(log *logger.Logger) echo.MiddlewareFunc {
+func MiddleWare(log *logger.Logger) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			start := time.Now()

@@ -5,6 +5,8 @@ import (
 	"os"
 	"strconv"
 	"sync"
+
+	"golang.org/x/term"
 )
 
 type Logger struct {
@@ -42,6 +44,15 @@ func (l *Logger) WithOptions(options Options) *Logger {
 	if l.options.NoColor {
 		l.foreground = ""
 		l.background = ""
+	}
+
+	return l
+}
+
+// DetectTerminal sets NoColor to true if we are not inside a terminal
+func (l *Logger) DetectTerminal() *Logger {
+	if !term.IsTerminal(int(os.Stdout.Fd())) {
+		l.options.NoColor = true
 	}
 
 	return l
