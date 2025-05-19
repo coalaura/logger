@@ -8,6 +8,7 @@ import (
 type colorBuilder struct {
 	strings.Builder
 
+	ignore     bool
 	color      bool
 	background string
 
@@ -17,17 +18,18 @@ type colorBuilder struct {
 
 func newColorBuilder(logger *Logger) *colorBuilder {
 	return &colorBuilder{
+		ignore:     logger.forceNoColor,
 		color:      !logger.options.NoColor,
 		background: logger.background,
 	}
 }
 
-func (b *colorBuilder) ForceColor() {
+func (b *colorBuilder) EnableColor() {
 	b.color = true
 }
 
 func (b *colorBuilder) String() string {
-	if b.hasBackground || b.hasForeground {
+	if !b.ignore && b.color && (b.hasBackground || b.hasForeground) {
 		b.WriteString("\033[0m")
 	}
 
@@ -41,7 +43,7 @@ func (b *colorBuilder) StringLn() string {
 }
 
 func (b *colorBuilder) Write(foreground, str string) {
-	if !b.color {
+	if b.ignore || !b.color {
 		b.WriteString(str)
 
 		return

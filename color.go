@@ -27,7 +27,7 @@ func (l *Logger) parseColorCodes(builder *colorBuilder, fg, text string) {
 		code = text[match[2]:match[3]]
 		index = match[1]
 
-		builder.ForceColor()
+		builder.EnableColor()
 	}
 
 	if index < len(text) {

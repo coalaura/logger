@@ -13,6 +13,8 @@ type Logger struct {
 	options Options
 	out     io.Writer
 
+	forceNoColor bool
+
 	foreground string
 	background string
 
@@ -49,10 +51,10 @@ func (l *Logger) WithOptions(options Options) *Logger {
 	return l
 }
 
-// DetectTerminal sets NoColor to true if we are not inside a terminal
+// DetectTerminal checks if we are in a terminal, otherwise suppresses all color output. Useful for file outputs, etc.
 func (l *Logger) DetectTerminal() *Logger {
 	if !term.IsTerminal(int(os.Stdout.Fd())) {
-		l.options.NoColor = true
+		l.forceNoColor = true
 	}
 
 	return l
