@@ -30,11 +30,18 @@ func (l *Logger) FatalE(err error) {
 	l.println(LevelFatal, err.Error())
 }
 
+// Panic logs and panics with the given error
+func (l *Logger) Panic(err error) {
+	l.FatalE(err)
+
+	panic(err)
+}
+
 // MustPanic logs and panics if the error is not nil
 func (l *Logger) MustPanic(err error) {
-	if err != nil {
-		l.FatalE(err)
-
-		panic(err)
+	if err == nil {
+		return
 	}
+
+	l.Panic(err)
 }
