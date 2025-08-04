@@ -5,56 +5,34 @@ import (
 	"sync/atomic"
 )
 
-type StatusWriter struct {
+type StatusRecorder struct {
 	http.ResponseWriter
-	status int64
+	status int32
 }
 
-func (w *StatusWriter) WriteHeader(statusCode int) {
-	atomic.SwapInt64(&w.status, int64(statusCode))
-
-	w.ResponseWriter.WriteHeader(statusCode)
+func NewStatusRecorder(w http.ResponseWriter) *StatusRecorder {
+	return &StatusRecorder{
+		ResponseWriter: w,
+		status:         0,
+	}
 }
 
-func (w *StatusWriter) GetStatusCode() int {
-	return int(atomic.LoadInt64(&w.status))
+func (r *StatusRecorder) WriteHeader(code int) {
+	atomic.CompareAndSwapInt32(&r.status, 0, int32(code))
+
+	r.ResponseWriter.WriteHeader(code)
 }
 
-func NewStatusWriter(w http.ResponseWriter) http.ResponseWriter {
-	var result http.ResponseWriter = &StatusWriter{ResponseWriter: w}
+func (r *StatusRecorder) Write(b []byte) (int, error) {
+	atomic.CompareAndSwapInt32(&r.status, 0, http.StatusOK)
 
-	// http.Flusher compliance
-	if flusher, ok := w.(http.Flusher); ok {
-		result = &struct {
-			http.ResponseWriter
-			http.Flusher
-		}{
-			ResponseWriter: result,
-			Flusher:        flusher,
-		}
-	}
+	return r.ResponseWriter.Write(b)
+}
 
-	// http.Hijacker compliance
-	if hijacker, ok := w.(http.Hijacker); ok {
-		result = &struct {
-			http.ResponseWriter
-			http.Hijacker
-		}{
-			ResponseWriter: result,
-			Hijacker:       hijacker,
-		}
-	}
+func (r *StatusRecorder) StatusCode() int {
+	return int(atomic.LoadInt32(&r.status))
+}
 
-	// http.Pusher compliance
-	if pusher, ok := w.(http.Pusher); ok {
-		result = &struct {
-			http.ResponseWriter
-			http.Pusher
-		}{
-			ResponseWriter: result,
-			Pusher:         pusher,
-		}
-	}
-
-	return result
+func (r *StatusRecorder) Unwrap() http.ResponseWriter {
+	return r.ResponseWriter
 }

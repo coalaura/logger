@@ -16,15 +16,15 @@ type HTTPAdapter struct {
 func Middleware(log *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			wr := NewStatusWriter(w)
+			recorder := NewStatusRecorder(w)
 
 			start := time.Now()
 
-			next.ServeHTTP(wr, r)
+			next.ServeHTTP(recorder, r)
 
 			log.LogHTTPRequest(&HTTPAdapter{
 				request:   r,
-				response:  wr,
+				response:  recorder,
 				timeTaken: time.Since(start),
 			})
 		})
@@ -44,8 +44,8 @@ func (a *HTTPAdapter) ClientIP() string {
 }
 
 func (a *HTTPAdapter) StatusCode() int {
-	if sw, ok := a.response.(*StatusWriter); ok {
-		return sw.GetStatusCode()
+	if sw, ok := a.response.(*StatusRecorder); ok {
+		return sw.StatusCode()
 	}
 
 	return 0
