@@ -1,26 +1,60 @@
 package http
 
 import (
-	"bufio"
-	"fmt"
-	"net"
 	"net/http"
+	"sync/atomic"
 )
 
-type statusWriter struct {
+type StatusWriter struct {
 	http.ResponseWriter
-	status int
+	status int64
 }
 
-func (w *statusWriter) WriteHeader(statusCode int) {
-	w.status = statusCode
+func (w *StatusWriter) WriteHeader(statusCode int) {
+	atomic.SwapInt64(&w.status, int64(statusCode))
+
 	w.ResponseWriter.WriteHeader(statusCode)
 }
 
-func (w *statusWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
-	if hj, ok := w.ResponseWriter.(http.Hijacker); ok {
-		return hj.Hijack()
+func (w *StatusWriter) GetStatusCode() int {
+	return int(atomic.LoadInt64(&w.status))
+}
+
+func NewStatusWriter(w http.ResponseWriter) http.ResponseWriter {
+	var result http.ResponseWriter = &StatusWriter{ResponseWriter: w}
+
+	// http.Flusher compliance
+	if flusher, ok := w.(http.Flusher); ok {
+		result = &struct {
+			http.ResponseWriter
+			http.Flusher
+		}{
+			ResponseWriter: result,
+			Flusher:        flusher,
+		}
 	}
 
-	return nil, nil, fmt.Errorf("http.ResponseWriter does not implement http.Hijacker")
+	// http.Hijacker compliance
+	if hijacker, ok := w.(http.Hijacker); ok {
+		result = &struct {
+			http.ResponseWriter
+			http.Hijacker
+		}{
+			ResponseWriter: result,
+			Hijacker:       hijacker,
+		}
+	}
+
+	// http.Pusher compliance
+	if pusher, ok := w.(http.Pusher); ok {
+		result = &struct {
+			http.ResponseWriter
+			http.Pusher
+		}{
+			ResponseWriter: result,
+			Pusher:         pusher,
+		}
+	}
+
+	return result
 }
