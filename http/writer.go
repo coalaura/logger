@@ -3,6 +3,8 @@ package http
 import (
 	"net/http"
 	"sync/atomic"
+
+	"github.com/felixge/httpsnoop"
 )
 
 type StatusRecorder struct {
@@ -10,29 +12,32 @@ type StatusRecorder struct {
 	status int32
 }
 
-func NewStatusRecorder(w http.ResponseWriter) *StatusRecorder {
-	return &StatusRecorder{
+func NewStatusRecorder(w http.ResponseWriter) (http.ResponseWriter, *StatusRecorder) {
+	recorder := &StatusRecorder{
 		ResponseWriter: w,
 		status:         0,
 	}
-}
 
-func (r *StatusRecorder) WriteHeader(code int) {
-	atomic.CompareAndSwapInt32(&r.status, 0, int32(code))
+	wrapped := httpsnoop.Wrap(w, httpsnoop.Hooks{
+		WriteHeader: func(next httpsnoop.WriteHeaderFunc) httpsnoop.WriteHeaderFunc {
+			return func(code int) {
+				atomic.CompareAndSwapInt32(&recorder.status, 0, int32(code))
 
-	r.ResponseWriter.WriteHeader(code)
-}
+				next(code)
+			}
+		},
+		Write: func(next httpsnoop.WriteFunc) httpsnoop.WriteFunc {
+			return func(b []byte) (int, error) {
+				atomic.CompareAndSwapInt32(&recorder.status, 0, http.StatusOK)
 
-func (r *StatusRecorder) Write(b []byte) (int, error) {
-	atomic.CompareAndSwapInt32(&r.status, 0, http.StatusOK)
+				return next(b)
+			}
+		},
+	})
 
-	return r.ResponseWriter.Write(b)
+	return wrapped, recorder
 }
 
 func (r *StatusRecorder) StatusCode() int {
 	return int(atomic.LoadInt32(&r.status))
-}
-
-func (r *StatusRecorder) Unwrap() http.ResponseWriter {
-	return r.ResponseWriter
 }

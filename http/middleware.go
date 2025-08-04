@@ -9,18 +9,18 @@ import (
 
 type HTTPAdapter struct {
 	request   *http.Request
-	response  http.ResponseWriter
+	response  *StatusRecorder
 	timeTaken time.Duration
 }
 
 func Middleware(log *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			recorder := NewStatusRecorder(w)
+			wrapped, recorder := NewStatusRecorder(w)
 
 			start := time.Now()
 
-			next.ServeHTTP(recorder, r)
+			next.ServeHTTP(wrapped, r)
 
 			log.LogHTTPRequest(&HTTPAdapter{
 				request:   r,
@@ -44,11 +44,7 @@ func (a *HTTPAdapter) ClientIP() string {
 }
 
 func (a *HTTPAdapter) StatusCode() int {
-	if sw, ok := a.response.(*StatusRecorder); ok {
-		return sw.StatusCode()
-	}
-
-	return 0
+	return a.response.StatusCode()
 }
 
 func (a *HTTPAdapter) TimeTaken() time.Duration {
