@@ -5,26 +5,25 @@ import (
 	"time"
 
 	"github.com/coalaura/logger"
+	"github.com/felixge/httpsnoop"
 )
 
 type HTTPAdapter struct {
 	request   *http.Request
-	response  *StatusRecorder
+	metrics   httpsnoop.Metrics
 	timeTaken time.Duration
 }
 
 func Middleware(log *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			wrapped, recorder := NewStatusRecorder(w)
-
 			start := time.Now()
 
-			next.ServeHTTP(wrapped, r)
+			metrics := httpsnoop.CaptureMetrics(next, w, r)
 
 			log.LogHTTPRequest(&HTTPAdapter{
 				request:   r,
-				response:  recorder,
+				metrics:   metrics,
 				timeTaken: time.Since(start),
 			})
 		})
@@ -44,7 +43,7 @@ func (a *HTTPAdapter) ClientIP() string {
 }
 
 func (a *HTTPAdapter) StatusCode() int {
-	return a.response.StatusCode()
+	return a.metrics.Code
 }
 
 func (a *HTTPAdapter) TimeTaken() time.Duration {
