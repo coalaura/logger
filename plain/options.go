@@ -14,6 +14,13 @@ func WithColor(code int) option {
 	}
 }
 
+// WithWarn sets the foreground color code for warnings.
+func WithWarn(code int) option {
+	return func(p *PlainLogger) {
+		p.wrnCode = []byte(fmt.Sprintf("\x1b[38;5;%dm", code))
+	}
+}
+
 // WithError sets the foreground color code for errors.
 func WithError(code int) option {
 	return func(p *PlainLogger) {
