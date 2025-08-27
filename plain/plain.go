@@ -66,6 +66,11 @@ func (p *PlainLogger) Printf(format string, a ...any) (int, error) {
 	return fmt.Fprintf(p, format, a...)
 }
 
+// Print formats using the default formats for its operands and writes to the target output.
+func (p *PlainLogger) Print(a ...any) (int, error) {
+	return fmt.Fprint(p, a...)
+}
+
 // Println formats using the default formats for its operands and writes to the target output.
 func (p *PlainLogger) Println(a ...any) (int, error) {
 	return fmt.Fprintln(p, a...)
@@ -76,6 +81,13 @@ func (p *PlainLogger) Warnf(format string, a ...any) (int, error) {
 	wr := wrap(p, p.wrnCode)
 
 	return fmt.Fprintf(wr, format, a...)
+}
+
+// Warn formats using the default formats for its operands and writes to the target output as a warning.
+func (p *PlainLogger) Warn(a ...any) (int, error) {
+	wr := wrap(p, p.wrnCode)
+
+	return fmt.Fprint(wr, a...)
 }
 
 // Warnln formats using the default formats for its operands and writes to the target output as a warning.
@@ -90,6 +102,13 @@ func (p *PlainLogger) Errorf(format string, a ...any) (int, error) {
 	wr := wrap(p, p.errCode)
 
 	return fmt.Fprintf(wr, format, a...)
+}
+
+// Error formats using the default formats for its operands and writes to the target output as an error.
+func (p *PlainLogger) Error(a ...any) (int, error) {
+	wr := wrap(p, p.errCode)
+
+	return fmt.Fprint(wr, a...)
 }
 
 // Errorln formats using the default formats for its operands and writes to the target output as an error.
