@@ -1,5 +1,7 @@
 package logger
 
+import "os"
+
 // DebugE logs an error with the log level debug
 func (l *Logger) DebugE(err error) {
 	l.println(LevelDebug, err.Error())
@@ -44,4 +46,15 @@ func (l *Logger) MustPanic(err error) {
 	}
 
 	l.Panic(err)
+}
+
+// MustFail logs and exits with code 1 if the error is not nil (without panicking)
+func (l *Logger) MustFail(err error) {
+	if err == nil {
+		return
+	}
+
+	l.FatalE(err)
+
+	os.Exit(1)
 }
