@@ -10,7 +10,14 @@ type option func(*PlainLogger)
 // WithColor sets the foreground color code.
 func WithColor(code int) option {
 	return func(p *PlainLogger) {
-		p.code = []byte(fmt.Sprintf("\x1b[38;5;%dm", code))
+		p.defCode = []byte(fmt.Sprintf("\x1b[38;5;%dm", code))
+	}
+}
+
+// WithError sets the foreground color code for errors.
+func WithError(code int) option {
+	return func(p *PlainLogger) {
+		p.errCode = []byte(fmt.Sprintf("\x1b[38;5;%dm", code))
 	}
 }
 
